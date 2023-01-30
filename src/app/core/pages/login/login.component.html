@@ -1,0 +1,49 @@
+<div class="grid">
+  <div class="md:col-3 lg:col-4"></div>
+  <div class="col-12 md:col-6 lg:col-4">
+    <p-tabView (onChange)="tabChange($event)">
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" pInputText class="w-full" />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="w-full">
+          <p-password
+            id="password"
+            [toggleMask]="true"
+            [feedback]="registerTabActive"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          ></p-password>
+        </div>
+      </div>
+      <p-tabPanel header="Login">
+        <div class="text-right">
+          Need to reset your password?
+          <a class="reset-link" (click)="resetPassword()">Click here.</a>
+        </div>
+        <p-button label="Login"></p-button>
+      </p-tabPanel>
+      <p-tabPanel header="Register">
+        <div class="mt-8">
+          <h3>Personal Details</h3>
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="text" pInputText class="w-full" />
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="text" pInputText class="w-full" />
+          </div>
+          <div class="field">
+            <label for="preferredName">Nickname</label>
+            <input id="preferredName" type="text" pInputText class="w-full" />
+          </div>
+          <p-button label="Register"></p-button>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+  <div class="md:col-3 lg:col-4"></div>
+</div>
