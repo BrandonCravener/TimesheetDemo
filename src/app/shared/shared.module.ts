@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmployeeService } from './services/services/employee.service';
+import { UserService } from './services/user.service';
+import { PunchService } from './services/punch.service';
 
 
 
@@ -10,7 +11,8 @@ import { EmployeeService } from './services/services/employee.service';
     CommonModule
   ],
   providers: [
-    EmployeeService
+    UserService,
+    PunchService
   ]
 })
 export class SharedModule { }

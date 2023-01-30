@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { ReactiveFormsModule } from '@angular/forms';
 
 // Local
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { TabViewModule } from 'primeng/tabview';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 
 
 
@@ -38,6 +42,8 @@ import { ButtonModule } from 'primeng/button';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    ReactiveFormsModule,
+
     // Local
     LandingModule,
     // UI
@@ -46,12 +52,16 @@ import { ButtonModule } from 'primeng/button';
     InputTextModule,
     TabViewModule,
     ButtonModule,
+    ToastModule,
 
     // Firebase
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore())
 
+  ],
+  providers: [
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
