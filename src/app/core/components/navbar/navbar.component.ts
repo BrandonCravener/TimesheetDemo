@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 
@@ -10,24 +11,24 @@ import { AuthService } from '../../services/auth.service';
 export class NavbarComponent implements OnInit {
 
   show: boolean = true;
+  authenticated: boolean = false;
 
   refresh() {
     this.show = false;
     setTimeout(() => this.show = true, 0)
   }
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     this.authService.user.subscribe(user => {
       if (user) {
         this.menuItems[1]['visible'] = true;
-        this.menuItems[2]['visible'] = false;
-        this.menuItems[3]['visible'] = true;
+        this.authenticated = true;
       } else {
         this.menuItems[1]['visible'] = false;
-        this.menuItems[2]['visible'] = true;
-        this.menuItems[3]['visible'] = false;
-      }
+        this.authenticated = false;
 
+        this.router.navigateByUrl('/')
+      }
       this.refresh()
     })
   }
@@ -58,19 +59,15 @@ export class NavbarComponent implements OnInit {
         }
       ],
       visible: this.authService.currentlyAuthenticated
-    },
-    {
-      label: 'Login',
-      routerLink: '/login',
-      visible: !this.authService.currentlyAuthenticated
-    },
-    {
-      label: 'Sign-out',
-      command: () => {
-        this.authService.logout()
-      },
-      visible: this.authService.currentlyAuthenticated
     }
   ]
+
+  signIn() {
+    this.router.navigateByUrl('/login')
+  }
+
+  signOut() {
+    this.authService.logout()
+  }
 
 }

@@ -1,1 +1,51 @@
-<p>viewer works!</p>
+<p-toolbar styleClass="mb-4 gap-2">
+  <ng-template pTemplate="left">
+    <button
+      pButton
+      pRipple
+      label="Add"
+      icon="pi pi-plus"
+      class="p-button-success mr-2"
+      routerLink="/punch/add"
+    ></button>
+    <button
+      pButton
+      pRipple
+      icon="pi pi-trash"
+      class="p-button-danger"
+      (click)="deleteSelected()"
+    ></button>
+  </ng-template>
+
+  <ng-template pTemplate="right"> </ng-template>
+</p-toolbar>
+
+<p-table
+  [value]="punches"
+  selectionMode="multiple"
+  dataKey="id"
+  [(selection)]="selectedPunches"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th>Time</th>
+      <th>Type</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-punch let-rowIndex="rowIndex">
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="punch"></p-tableCheckbox>
+      </td>
+      <td>{{ punch.time | timestamp | date : "long" }}</td>
+      <td>{{ punch.type | punchType }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-confirmDialog
+  header="Delete?"
+  icon="pi pi-exclamation-triangle"
+></p-confirmDialog>

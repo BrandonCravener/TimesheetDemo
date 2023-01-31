@@ -1,10 +1,9 @@
 import { Injectable, Optional } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { doc, Firestore, getDocs, query, Timestamp, where } from '@angular/fire/firestore';
+import { doc, Firestore, getDocs, query, Timestamp, where, writeBatch } from '@angular/fire/firestore';
 import { addDoc, collection } from '@firebase/firestore';
 import { PunchType } from '../enums/PunchType';
 import { Punch } from '../models/Punch';
-import { PunchQuery } from '../models/PunchQuery';
 
 @Injectable({
   providedIn: 'root'
@@ -22,16 +21,44 @@ export class PunchService {
       uid: this.auth.currentUser?.uid!
     }
 
-    addDoc(this.punchCollection, punchDoc)
+    return await addDoc(this.punchCollection, punchDoc)
   }
 
-  async getPunches() {
-    let output: { [key: string]: PunchQuery } = {}
+  async getPunches(): Promise<Punch[]> {
     const q = query(this.punchCollection, where('uid', '==', this.auth.currentUser?.uid!))
-    const snapshot = await getDocs(q)
-    snapshot.forEach(doc => {
-      output[doc.id] = (doc.data() as PunchQuery)
-    })
+
+    try {
+      const snapshot = await getDocs(q)
+      let output: Punch[] = []
+
+      snapshot.forEach(doc => {
+        let punch = (doc.data() as Punch)
+        punch.id = doc.id
+        output.push(punch)
+      })
+
+      return output;
+
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
+
+  async deletePunches(punches: Punch[]) {
+    const batch = writeBatch(this.firestore);
+
+    if (punches.length >= 500) {
+      // Error handled in component
+      return Promise.reject(-1);
+    }
+
+    for (let i = 0; i < punches.length; i++) {
+      const punch = punches[i];
+      batch.delete(doc(this.firestore, this.punchCollection.path, punch.id!))
+    }
+
+    return await batch.commit()
   }
 
 }

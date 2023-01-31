@@ -1,1 +1,23 @@
-<p-menubar [model]="menuItems" *ngIf="show"> </p-menubar>
+<p-menubar [model]="menuItems" *ngIf="show">
+  <ng-template pTemplate="end">
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="Sign-out"
+      class="p-button-text"
+      (click)="signOut()"
+      *ngIf="authenticated; else unAuthenticated"
+    ></button>
+    <ng-template #unAuthenticated>
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Sign-in"
+        class="p-button-text"
+        (click)="signIn()"
+      ></button>
+    </ng-template>
+  </ng-template>
+</p-menubar>

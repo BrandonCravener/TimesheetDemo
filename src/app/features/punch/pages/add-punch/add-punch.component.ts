@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { PunchType } from 'src/app/shared/enums/PunchType';
 import { PunchService } from 'src/app/shared/services/punch.service';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -40,7 +42,7 @@ export class AddPunchComponent implements OnInit {
   enableSubmit: boolean = true;
 
 
-  constructor(private punchService: PunchService) { }
+  constructor(private punchService: PunchService, private messageService: MessageService, private router: Router) { }
 
   valid() {
     const formData = this.addPunchForm.value;
@@ -55,14 +57,32 @@ export class AddPunchComponent implements OnInit {
     })
   }
 
-  addPunch() {
+  async addPunch() {
     if (this.valid()) {
       const formData = this.addPunchForm.value;
       var time = Date.now()
       if (!formData.useCurrentTime) time = Date.parse(formData.customDateTime!)
 
-      this.punchService.addPunch(formData.type!, time)
-      this.addPunchForm.reset()
+      try {
+        await this.punchService.addPunch(formData.type!, time)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Punch Added!'
+        })
+        this.router.navigateByUrl("/punch/viewer")
+      } catch (err: any) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Punch Not Added',
+          detail: 'Unable to add punch at this time please reload and try again.'
+        })
+      }
+
+      this.addPunchForm.reset({
+        type: PunchType.In,
+        useCurrentTime: true,
+        customDateTime: ''
+      })
     }
   }
 

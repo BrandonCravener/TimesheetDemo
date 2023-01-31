@@ -25,6 +25,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { NotFoundComponent } from './core/pages/not-found/not-found.component';
 
 
 
@@ -35,7 +36,8 @@ import { MessageService } from 'primeng/api';
   declarations: [
     AppComponent,
     NavbarComponent,
-    LoginComponent
+    LoginComponent,
+    NotFoundComponent
   ],
   imports: [
     // Angular

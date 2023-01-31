@@ -1,9 +1,10 @@
 import { Component, Optional } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, AuthErrorCodes } from '@angular/fire/auth';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/shared/services/user.service';
+import AuthErrorMessage from 'src/app/shared/utils/AuthErrorMessage';
 
 
 @Component({
@@ -28,6 +29,23 @@ export class LoginComponent {
 
   constructor(@Optional() private auth: Auth, private router: Router, private messageService: MessageService, private employeeService: UserService) { }
 
+
+  async handleAuthError(errorCode: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Login Trouble!',
+      detail: AuthErrorMessage(errorCode)
+    })
+  }
+
+  async invalidForm() {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Invalid Information',
+      detail: 'Please verify you have filled out all fields on the form.'
+    })
+  }
+
   async resetPassword() {
     const emailControl = this.loginForm.get('loginEmail');
     if (emailControl?.valid) {
@@ -39,11 +57,7 @@ export class LoginComponent {
           detail: 'If the email address entered is associated with an account you will get the reset email shortly.'
         })
       } catch (err: any) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Registration Issues',
-          detail: err.message
-        })
+        this.handleAuthError(err.code)
       }
     } else {
       this.messageService.add({
@@ -52,7 +66,6 @@ export class LoginComponent {
         detail: 'Please enter a valid email to reset your password.'
       })
     }
-
   }
 
   async login() {
@@ -62,15 +75,10 @@ export class LoginComponent {
         await signInWithEmailAndPassword(this.auth, loginData.loginEmail!, loginData.loginPassword!)
         this.router.navigateByUrl('/')
       } catch (err: any) {
-        // err.code https://firebase.google.com/docs/reference/js/auth#autherrorcodes
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Login Issues',
-          detail: err.message
-        })
+        this.handleAuthError(err.code)
       }
     } else {
-      console.log(this.loginForm.errors)
+      this.invalidForm()
     }
   }
 
@@ -83,13 +91,10 @@ export class LoginComponent {
         this.employeeService.createUser(user.uid, fullName, registerData.preferredName!)
         this.router.navigateByUrl('/')
       } catch (err: any) {
-        // err.code https://firebase.google.com/docs/reference/js/auth#autherrorcodes
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Registration Issues',
-          detail: err.message
-        })
+        this.handleAuthError(err.code)
       }
+    } else {
+      this.invalidForm()
     }
   }
 

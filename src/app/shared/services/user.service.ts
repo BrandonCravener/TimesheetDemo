@@ -17,7 +17,7 @@ export class UserService {
       added: Timestamp.fromMillis(Date.now())
     }
 
-    await setDoc(doc(this.firestore, "users", uid), docData)
+    return await setDoc(doc(this.firestore, "users", uid), docData)
   }
 
 

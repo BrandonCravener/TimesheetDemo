@@ -14,7 +14,10 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { ViewerComponent } from './pages/viewer/viewer.component';
-
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 
@@ -23,6 +26,9 @@ import { ViewerComponent } from './pages/viewer/viewer.component';
   declarations: [
     AddPunchComponent,
     ViewerComponent
+  ],
+  providers: [
+    ConfirmationService
   ],
   imports: [
     // Angular
@@ -34,6 +40,9 @@ import { ViewerComponent } from './pages/viewer/viewer.component';
     ButtonModule,
     CheckboxModule,
     CalendarModule,
+    TableModule,
+    ToolbarModule,
+    ConfirmDialogModule,
     // Local
     PunchRoutingModule,
     SharedModule
