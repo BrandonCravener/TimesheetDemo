@@ -10,7 +10,7 @@ import { PunchTypePipe } from './pipes/punch-type.pipe';
 @NgModule({
   declarations: [
     TimestampPipe,
-    PunchTypePipe
+    PunchTypePipe,
   ],
   imports: [
     CommonModule

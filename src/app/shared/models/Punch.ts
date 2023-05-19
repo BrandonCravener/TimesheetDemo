@@ -6,4 +6,5 @@ export interface Punch {
     uid: string;
     time: Timestamp;
     type: PunchType;
+    memo: string;
 }

@@ -10,7 +10,8 @@ import AuthErrorMessage from 'src/app/shared/utils/AuthErrorMessage';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.sass']
+  styleUrls: ['./login.component.sass'],
+  providers: [MessageService]
 })
 export class LoginComponent {
 

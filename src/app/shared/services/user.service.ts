@@ -19,6 +19,4 @@ export class UserService {
 
     return await setDoc(doc(this.firestore, "users", uid), docData)
   }
-
-
 }

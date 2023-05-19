@@ -1,31 +1,51 @@
 import { Injectable, Optional } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { doc, Firestore, getDocs, query, Timestamp, where, writeBatch } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, getDocs, query, Timestamp, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { addDoc, collection } from '@firebase/firestore';
 import { PunchType } from '../enums/PunchType';
 import { Punch } from '../models/Punch';
+import { punchConverter } from '../coverters/punch';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PunchService {
 
-  private readonly punchCollection = collection(this.firestore, "punches")
+  private readonly punchCollection = collection(this.firestore, "punches").withConverter(punchConverter)
 
   constructor(private firestore: Firestore, @Optional() private auth: Auth) { }
 
-  async addPunch(type: PunchType, time: number) {
+  async addPunch(type: PunchType, time: number, memo: string) {
     const punchDoc: Punch = {
       time: Timestamp.fromMillis(time),
       type: type,
+      memo: memo,
       uid: this.auth.currentUser?.uid!
     }
 
     return await addDoc(this.punchCollection, punchDoc)
   }
 
+  async updatePunch(punch: Punch): Promise<void> {
+    return await updateDoc(doc(this.firestore, this.punchCollection.path, punch.id!), {
+      type: punch.type,
+      memo: punch.memo,
+      time: punch.time
+    })
+  }
+
+  async getPunch(id: string): Promise<Punch> {
+    try {
+      let punch = await getDoc<Punch>(doc(this.firestore, this.punchCollection.path, id).withConverter(punchConverter));
+      if (punch.exists()) return punch.data()
+      else return Promise.reject(new Error("Unable to find punch"))
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  }
+
   async getPunches(): Promise<Punch[]> {
-    const q = query(this.punchCollection, where('uid', '==', this.auth.currentUser?.uid!))
+    const q = query<Punch>(this.punchCollection, where('uid', '==', this.auth.currentUser?.uid!)).withConverter(punchConverter)
 
     try {
       const snapshot = await getDocs(q)
@@ -38,7 +58,6 @@ export class PunchService {
       })
 
       return output;
-
     } catch (err) {
       return Promise.reject(err);
     }
@@ -60,5 +79,4 @@ export class PunchService {
 
     return await batch.commit()
   }
-
 }

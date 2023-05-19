@@ -23,8 +23,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { TabViewModule } from 'primeng/tabview';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
 import { NotFoundComponent } from './core/pages/not-found/not-found.component';
 
 
@@ -54,7 +53,7 @@ import { NotFoundComponent } from './core/pages/not-found/not-found.component';
     InputTextModule,
     TabViewModule,
     ButtonModule,
-    ToastModule,
+    MessagesModule,
 
     // Firebase
     provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -62,9 +61,7 @@ import { NotFoundComponent } from './core/pages/not-found/not-found.component';
     provideFirestore(() => getFirestore())
 
   ],
-  providers: [
-    MessageService
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

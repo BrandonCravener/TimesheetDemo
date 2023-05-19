@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Punch } from 'src/app/shared/models/Punch';
 import { PunchService } from 'src/app/shared/services/punch.service';
@@ -13,7 +14,7 @@ export class ViewerComponent implements OnInit {
   punches: Punch[] = []
   selectedPunches: Punch[] = []
 
-  constructor(private punchSerice: PunchService, private confirmationService: ConfirmationService) { }
+  constructor(private punchSerice: PunchService, private confirmationService: ConfirmationService, private router: Router) { }
 
   sortPunches(list: Punch[]) {
     return list.sort((a, b) => {
@@ -25,6 +26,9 @@ export class ViewerComponent implements OnInit {
     this.punches = this.sortPunches(await this.punchSerice.getPunches())
   }
 
+  editSelected() {
+    this.router.navigate(['punch/edit', this.selectedPunches[0].id])
+  }
 
   deleteSelected() {
     this.confirmationService.confirm({
