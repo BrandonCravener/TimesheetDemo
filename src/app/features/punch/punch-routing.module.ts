@@ -6,7 +6,17 @@ import { ViewerComponent } from './pages/viewer/viewer.component';
 const routes: Routes = [
   {
     path: 'add',
-    component: AddPunchComponent
+    component: AddPunchComponent,
+    data: {
+      edit: false
+    }
+  },
+  {
+    path: 'edit/:punchId',
+    component: AddPunchComponent,
+    data: {
+      edit: true
+    }
   },
   {
     path: 'viewer',
