@@ -8,20 +8,18 @@ import { PunchTypePipe } from './pipes/punch-type.pipe';
 
 
 @NgModule({
-  declarations: [
-    TimestampPipe,
-    PunchTypePipe,
-  ],
-  imports: [
-    CommonModule
-  ],
-  providers: [
-    UserService,
-    PunchService
-  ],
-  exports: [
-    TimestampPipe,
-    PunchTypePipe
-  ]
+    imports: [
+        CommonModule,
+        TimestampPipe,
+        PunchTypePipe
+    ],
+    providers: [
+        UserService,
+        PunchService
+    ],
+    exports: [
+        TimestampPipe,
+        PunchTypePipe
+    ]
 })
 export class SharedModule { }

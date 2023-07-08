@@ -1,14 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, SharedModule } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
+import { ButtonModule } from 'primeng/button';
+import { MenubarModule } from 'primeng/menubar';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.sass']
+  styleUrls: ['./navbar.component.sass'],
+  standalone: true,
+  imports: [NgIf, MenubarModule, SharedModule, ButtonModule]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
+  menuItems: MenuItem[] = [
+    {
+      label: 'Home',
+      icon: 'pi pi-home',
+      routerLink: '/'
+    },
+    {
+      label: 'Punches',
+      items: [
+        {
+          label: "Add Punch",
+          icon: 'pi pi-plus',
+          routerLink: '/punch/add'
+        }
+      ],
+      visible: this.authService.currentlyAuthenticated
+    }
+  ]
 
   show: boolean = true;
   authenticated: boolean = false;
@@ -32,35 +55,6 @@ export class NavbarComponent implements OnInit {
       this.refresh()
     })
   }
-
-
-
-  ngOnInit(): void {
-
-  }
-
-  menuItems: MenuItem[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-home',
-      routerLink: '/'
-    },
-    {
-      label: 'Punches',
-      items: [
-        {
-          label: 'Viewer',
-          routerLink: '/punch/viewer'
-        },
-        {
-          label: "Add Punch",
-          icon: 'pi pi-plus',
-          routerLink: '/punch/add'
-        }
-      ],
-      visible: this.authService.currentlyAuthenticated
-    }
-  ]
 
   signIn() {
     this.router.navigateByUrl('/login')

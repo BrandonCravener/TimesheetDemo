@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 
 @Pipe({
-  name: 'timestamp'
+    name: 'timestamp',
+    standalone: true
 })
 export class TimestampPipe implements PipeTransform {
 

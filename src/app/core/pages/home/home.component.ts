@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { Route, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.sass']
+  styleUrls: ['./home.component.sass'],
+  standalone: true,
+  imports: [ButtonModule]
 })
 export class HomeComponent {
 

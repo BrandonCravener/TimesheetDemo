@@ -27,8 +27,8 @@
       <div class="mt-3" *ngIf="useCustomTime">
         <label for="customDate">Custom Time</label>
         <p-calendar
-          inputId="customDateTime"
-          formControlName="customDateTime"
+          inputId="time"
+          formControlName="time"
           [showTime]="true"
           hourFormat="12"
           styleClass="w-full"
@@ -45,7 +45,7 @@
       </div>
       <div class="mt-2">
         <p-button
-          label="Add"
+          [label]="edit ? 'Save' : 'Add'"
           type="submit"
           class="right"
           [disabled]="!enableSubmit"

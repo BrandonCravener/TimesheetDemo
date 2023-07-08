@@ -31,27 +31,51 @@
 </p-toolbar>
 
 <p-table
-  [value]="punches"
-  selectionMode="multiple"
+  #punchTable
   dataKey="id"
+  selectionMode="multiple"
+  [columns]="columns"
+  [loading]="loading"
+  [paginator]="true"
+  [value]="punches"
+  [rows]="10"
+  [showLoader]="false"
+  [rowsPerPageOptions]="[10, 25, 50]"
   [(selection)]="selectedPunches"
 >
-  <ng-template pTemplate="header">
+  <ng-template pTemplate="header" let-columns>
     <tr>
       <th style="width: 4rem">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th>Time</th>
-      <th>Type</th>
+      <th *ngFor="let col of columns">{{ col.header }}</th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-punch let-rowIndex="rowIndex">
+  <ng-template
+    pTemplate="body"
+    let-punch
+    let-rowIndex="rowIndex"
+    let-columns="columns"
+  >
     <tr>
       <td>
         <p-tableCheckbox [value]="punch"></p-tableCheckbox>
       </td>
-      <td>{{ punch.time | timestamp | date : "medium" }}</td>
-      <td>{{ punch.type | punchType }}</td>
+      <ng-container *ngFor="let col of columns" [ngSwitch]="col.key">
+        <td *ngSwitchCase="'time'">
+          {{ punch[col.key] | timestamp | date : "medium" }}
+        </td>
+        <td *ngSwitchCase="'type'">{{ punch[col.key] | punchType }}</td>
+        <td *ngSwitchDefault>{{ punch[col.key] }}</td>
+      </ng-container>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="loadingbody" let-columns>
+    <tr *ngFor="let idx of numberArray(punchTable.rows)">
+      <td><p-skeleton size="1.5rem"></p-skeleton></td>
+      <td *ngFor="let col of columns">
+        <p-skeleton></p-skeleton>
+      </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">

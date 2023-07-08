@@ -1,17 +1,24 @@
 import { Component, Optional } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, AuthErrorCodes } from '@angular/fire/auth';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/shared/services/user.service';
 import AuthErrorMessage from 'src/app/shared/utils/AuthErrorMessage';
+import { ButtonModule } from 'primeng/button';
+import { PasswordModule } from 'primeng/password';
+import { InputTextModule } from 'primeng/inputtext';
+import { TabViewModule } from 'primeng/tabview';
+import { MessagesModule } from 'primeng/messages';
 
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.sass'],
-  providers: [MessageService]
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.sass'],
+    providers: [MessageService],
+    standalone: true,
+    imports: [MessagesModule, TabViewModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule]
 })
 export class LoginComponent {
 

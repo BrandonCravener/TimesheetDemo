@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { PunchType } from '../enums/PunchType';
 
 @Pipe({
-  name: 'punchType'
+    name: 'punchType',
+    standalone: true
 })
 export class PunchTypePipe implements PipeTransform {
 

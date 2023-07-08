@@ -15,9 +15,9 @@ export class PunchService {
 
   constructor(private firestore: Firestore, @Optional() private auth: Auth) { }
 
-  async addPunch(type: PunchType, time: number, memo: string) {
+  async addPunch(type: PunchType, time: Date, memo: string) {
     const punchDoc: Punch = {
-      time: Timestamp.fromMillis(time),
+      time: Timestamp.fromDate(time),
       type: type,
       memo: memo,
       uid: this.auth.currentUser?.uid!
@@ -26,11 +26,13 @@ export class PunchService {
     return await addDoc(this.punchCollection, punchDoc)
   }
 
-  async updatePunch(punch: Punch): Promise<void> {
-    return await updateDoc(doc(this.firestore, this.punchCollection.path, punch.id!), {
-      type: punch.type,
-      memo: punch.memo,
-      time: punch.time
+  async updatePunch(id: string, type: PunchType, memo: string, time: Date | Timestamp): Promise<void> {
+    if (time instanceof Date) time = Timestamp.fromDate(time)
+
+    return await updateDoc(doc(this.firestore, this.punchCollection.path, id), {
+      type: type,
+      memo: memo,
+      time: time
     })
   }
 
